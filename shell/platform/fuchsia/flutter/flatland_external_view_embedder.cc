@@ -290,10 +290,13 @@ void FlatlandExternalViewEmbedder::SubmitFrame(
             flatland_layers_[flatland_layer_index].transform_id);
 
         // Attach full-screen hit testing shield.
+        // We use 1'000'000 for limits (instead of FLT_MAX) to ensure that,
+        // after any hit region transformations (such as translation, rotation,
+        // etc.) that there are no overflows.
         flatland_->flatland()->SetHitRegions(
             flatland_layers_[flatland_layer_index].transform_id,
-            {{{0, 0, std::numeric_limits<float>::max(),
-               std::numeric_limits<float>::max()},
+            {{{0, 0, 1'000'000,
+               1'000'000},
               fuchsia::ui::composition::HitTestInteraction::
                   SEMANTICALLY_INVISIBLE}});
       }
