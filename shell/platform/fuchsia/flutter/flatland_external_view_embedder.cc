@@ -297,10 +297,11 @@ void FlatlandExternalViewEmbedder::SubmitFrame(
             flatland_layers_[flatland_layer_index].transform_id);
 
         // Attach full-screen hit testing shield.
+        // Do not use FLT_MAX for hit-region size, as this will result in an
+        // overflow if the hit region is transformed (rotated, translated).
         flatland_->flatland()->SetHitRegions(
             flatland_layers_[flatland_layer_index].transform_id,
-            {{{0, 0, std::numeric_limits<float>::max(),
-               std::numeric_limits<float>::max()},
+            {{{0, 0, 1'000'000, 1'000'000},
               fuchsia::ui::composition::HitTestInteraction::
                   SEMANTICALLY_INVISIBLE}});
       }
